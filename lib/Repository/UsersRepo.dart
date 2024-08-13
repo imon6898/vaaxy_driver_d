@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vaaxy_driver/core/domain/api_const.dart';
 import 'package:vaaxy_driver/data/impl/userInformation.dart';
-import 'package:vaaxy_driver/data/network/AuthApiService.dart';
+import 'package:vaaxy_driver/data/network/userApiService.dart';
 import 'package:vaaxy_driver/model/UsersModel.dart';
 
 class UsersRepo{

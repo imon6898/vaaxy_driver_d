@@ -4,6 +4,17 @@ class ApiConstant {
   static const String baseUrl = "http://74.208.201.247:443";
 
   //END POINT
+  static const String sendOtpPhone = "/api/v1/send-otp-phone";
+  static const String verifyOtpPhone = "/api/v1/verify-otp-phone";
+
+  static const String sendOtpMail = "/api/v1/send-otp-email";
+  static const String verifyOtpMail = "/api/v1/verify-otp-email";
+
+  static const String signInDriver = "/api/v1/login";
+  static const String signUpDriver = "/api/v1/signUp-driver";
+
+
+
   static const String endPointSendOTP= "/api/v1/send-otp";
   static const String endPointSubmitOTP= "/api/v1/verify-otp";
   static const String endPointRegister= "/api/v1/register";
@@ -30,6 +41,9 @@ class ApiConstant {
   static const String endPointGetTransactionHistory= "/api/v1/get-transaction-history";
   static const String endPointGetUsageHistory= "";
   static const String endPointGeGallery= "/api/v1/gallery";
+
+
+
 
 
   static const String endPointLogOut= "/api/v1/logout";

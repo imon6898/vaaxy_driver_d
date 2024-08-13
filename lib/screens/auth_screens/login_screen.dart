@@ -59,7 +59,8 @@ class LoginScreen extends StatelessWidget {
                             width: MediaQuery.of(context).size.width,
                             onTap: () {
                               //controller.login(context);
-                              Get.toNamed('/homeScreen');
+                              controller.login(context);
+
                             },
                             color: Color(0xff95D4E5),
                             borderRadius: BorderRadius.circular(10),

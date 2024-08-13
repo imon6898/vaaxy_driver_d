@@ -1,3 +1,5 @@
+import 'dart:core';
+import 'dart:developer';
 import 'dart:io';
 import 'package:country_pickers/country.dart';
 import 'package:country_pickers/country_picker_cupertino.dart';
@@ -8,10 +10,14 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:vaaxy_driver/routes/app_routes.dart';
+
+import '../../../Repository/signup_repo.dart';
 
 class SignupController extends GetxController {
   var formNextKey = GlobalKey<FormState>();
   GlobalKey<FormState> registrationFormKey = GlobalKey<FormState>();
+  RxString countryCode = '1'.obs;
 
   var imageFile;
   File? selectedDrivingLicenseImageFrontSide;
@@ -25,6 +31,8 @@ class SignupController extends GetxController {
   var isPasswordVisible = false;
   var isConfirmPasswordVisible = false;
   var isflipCustomContainer = false.obs;
+  var isLoading = false.obs;
+  var errorMessage = ''.obs;
 
   void toggleOtpSent() {
     isflipCustomContainer.value = !isflipCustomContainer.value;
@@ -58,6 +66,19 @@ class SignupController extends GetxController {
   var insuranceCompanyNameController = TextEditingController();
   var insurancePolicyNumberController = TextEditingController();
   var insurancePhoneNumberController = TextEditingController();
+
+  String? passedPhoneNumber;
+  String? emailController;
+
+  @override
+  void onInit() {
+    super.onInit();
+    // Retrieve the passed phone number
+    passedPhoneNumber = Get.arguments['passedPhoneNumber'] ?? '';
+    log("Received Phone Number: $passedPhoneNumber");
+    emailController = Get.arguments['emailController'] ?? '';
+    log("Received Phone Number: $emailController");
+  }
 
 
   final List<String> genderOptions = ['Male', 'Female','He/She', 'They/Them', 'Other'];
@@ -279,23 +300,96 @@ class SignupController extends GetxController {
 
 
 
-  void registration(
-      File? imageFile,
-      String firstName,
-      String midName,
-      String lastName,
-      String dob,
-      String gender,
-      String password,
-      String confirmPassword,
-      String streetAddress,
-      String city,
-      String zipCode,
-      String state,
-      String country,
-      ) {
-    if (formNextKey.currentState!.validate()) {
-      toggleOtpSent();
+  Future<void> registerDriver() async {
+    isLoading.value = true;
+    errorMessage.value = '';
+
+    String phoneCode = '';
+    String phoneNumber = '';
+    if (passedPhoneNumber != null && passedPhoneNumber!.isNotEmpty) {
+      final RegExp regex = RegExp(r'^(\+\d+)(\d+)$');
+      final match = regex.firstMatch(passedPhoneNumber!);
+      if (match != null) {
+        phoneCode = match.group(1) ?? '';
+        phoneNumber = match.group(2) ?? '';
+      }
+    }
+
+    String insurancePhoneNumber = insurancePhoneNumberController.text.replaceAll(RegExp(r'\D'), '');
+    String formattedInsurancePhoneNumber = '+$countryCode$insurancePhoneNumber';
+
+    var params = {
+      'FirstName': signupNameController.text,
+      'MiddleName': signupMidNameController.text,
+      'LastName': signupLastNameController.text,
+      'Email': emailController,
+      'DateOfBirth': signupDateController.text,
+      'Gender': selectedGender,
+      'Password': confirmPasswordController.text,
+      'SSN': ssnNumberController.text,
+      'Country': countryController.text,
+      'PhoneNumber': phoneNumber,
+      'PhoneCode': phoneCode,
+      'InsurancePhoneNum': formattedInsurancePhoneNumber,
+      'InsuranceNumber': insurancePolicyNumberController.text,
+      'InsuranceCompany': insuranceCompanyNameController.text,
+      'VehicleType': 'car',
+      'NumberPlate': vehicleNumberController.text,
+      'Capacity': seatingCapacityController.text,
+      'LaunchhYear': vehicleYearController.text,
+      'Color': vehicleColorController.text,
+      'Modal': vehicleModelController.text,
+      'Brand': vehicleBrandController.text,
+      'IssuingState': issuingStateController.text,
+      'LicenseType': licenseTypeController.text,
+      'LicenseNumber': licenseNumberController.text,
+      'ExpirationDate': expiredateController.text,
+      'StreetAddress': streetAddressController.text,
+      'City': cityController.text,
+      'State': stateController.text,
+      'ZipCode': zipCodeController.text,
+    };
+
+    var requestFiles = <String, File>{};
+
+// Add files to the map
+    if (imageFile != null) {
+      requestFiles['Picture'] = imageFile!;
+      print('Picture file path: ${imageFile!.path}');
+    }
+    if (selectedInsuranceImageFrontSide != null) {
+      requestFiles['InsuranceCopy'] = selectedInsuranceImageFrontSide!;
+      print('InsuranceCopy file path: ${selectedInsuranceImageFrontSide!.path}');
+    }
+    if (selectedVehicleLicenseImageFrontSide != null) {
+      requestFiles['VehicleCopy'] = selectedVehicleLicenseImageFrontSide!;
+      print('VehicleCopy file path: ${selectedVehicleLicenseImageFrontSide!.path}');
+    }
+    if (selectedDrivingLicenseImageFrontSide != null) {
+      requestFiles['LicenseCopyFront'] = selectedDrivingLicenseImageFrontSide!;
+      print('LicenseCopyFront file path: ${selectedDrivingLicenseImageFrontSide!.path}');
+    }
+    if (selectedDrivingLicenseImageBackSide != null) {
+      requestFiles['LicenseCopyBack'] = selectedDrivingLicenseImageBackSide!;
+      print('LicenseCopyBack file path: ${selectedDrivingLicenseImageBackSide!.path}');
+    }
+
+
+    try {
+      final bool response = await SignupRepo().signUpRepo(params, requestFiles);
+      if (response) {
+        Get.snackbar('Success', 'Registration successful');
+        Get.offAndToNamed(AppRoutes.LoginScreen);
+      } else {
+        Get.snackbar('Error', 'Registration failed');
+      }
+    } catch (e) {
+      Get.snackbar('Error', 'An error occurred: $e');
+      print('Exception: $e');
+    } finally {
+      isLoading.value = false;
     }
   }
+
+
 }

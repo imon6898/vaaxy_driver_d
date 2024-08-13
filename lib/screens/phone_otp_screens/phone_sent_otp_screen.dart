@@ -93,6 +93,7 @@ class PhoneSentOtpScreen extends StatelessWidget {
                             onCompleted: (value) {
                               // Handle onCompleted event if needed
                             },
+                            controller: controller.otpController,
                           ),
                         ),
                         SizedBox(height: 60),
@@ -102,8 +103,14 @@ class PhoneSentOtpScreen extends StatelessWidget {
                           child: ShinyButton(
                             width: MediaQuery.of(context).size.width,
                             onTap: () {
+                              String countryCodeValue = controller.countryCode.value;
+                              String phoneNumber = controller.phoneNumberController.text.replaceAll(RegExp(r'\D'), '');
+                              String formattedPhoneNumber = '+$countryCodeValue$phoneNumber';
                               // Handle verify action
-                              Get.offAndToNamed('/mailSentOtpScreen');
+                              //controller.verifyOtpPhoneControll();
+                              //Get.offAndToNamed('/mailSentOtpScreen');
+                              Get.offAndToNamed('/mailSentOtpScreen', arguments: {'formattedPhoneNumber': formattedPhoneNumber});
+
                             },
                             color: Color(0xff95D4E5),
                             borderRadius: BorderRadius.circular(10),
@@ -159,6 +166,7 @@ class PhoneSentOtpScreen extends StatelessWidget {
                             }
                             return null;
                           },
+                          countryCode: controller.countryCode, // Pass the country code
                         ),
                         SizedBox(height: 60),
                         Padding(
@@ -168,6 +176,7 @@ class PhoneSentOtpScreen extends StatelessWidget {
                             width: MediaQuery.of(context).size.width,
                             onTap: () {
                               controller.toggleOtpSent();
+                              //controller.sendOtpPhoneControll();
                             },
                             color: Color(0xff95D4E5),
                             borderRadius: BorderRadius.circular(10),

@@ -7,6 +7,8 @@ import 'package:vaaxy_driver/screens/mail_otp_screens/controller/mail_otp_contro
 import 'package:vaaxy_driver/screens/phone_otp_screens/controller/phone_otp_controller.dart';
 import 'package:vaaxy_driver/screens/splash_screens/controller/splash_controller.dart';
 
+import '../di/user_di.dart';
+
 class ViewModelBinding extends Bindings {
   @override
   void dependencies() {
@@ -31,7 +33,7 @@ class ViewModelBinding extends Bindings {
     // Get.lazyPut<RegisterForNewVehicleController>(() => RegisterForNewVehicleController(), fenix: true);
     // Get.lazyPut<QrCodeCollectionController>(() => QrCodeCollectionController(), fenix: true);
     // Get.lazyPut<WebViewScreenController>(() => WebViewScreenController(), fenix: true);
-    // Get.put(UserDi());
+     Get.put(UserDi());
     // Get.put(NotificationControllerForApp());
   }
 }

@@ -95,7 +95,7 @@ class MailSentOtpScreen extends StatelessWidget {
                         child: ShinyButton(
                           width: MediaQuery.of(context).size.width,
                           onTap: () {
-                            controller.verifyOtp();
+                            controller.verifyOtpMailControll();
                             //Get.offAndToNamed('/signupScreen');
                           },
                           color: const Color(0xff95D4E5),
@@ -150,7 +150,7 @@ class MailSentOtpScreen extends StatelessWidget {
                         child: ShinyButton(
                           width: MediaQuery.of(context).size.width,
                           onTap: () {
-                            controller.sendOtpEmail();
+                            controller.sendOtpEmailControll();
                           },
                           color: const Color(0xff95D4E5),
                           borderRadius: BorderRadius.circular(10),

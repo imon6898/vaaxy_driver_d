@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+import 'package:vaaxy_driver/Repository/auth_repo.dart';
 import 'dart:developer';
+
 
 class MailOtpController extends GetxController {
   var emailController = TextEditingController();
@@ -10,6 +10,18 @@ class MailOtpController extends GetxController {
   var isOtpSent = false.obs;
   var isLoading = false.obs;
   var errorMessage = ''.obs;
+
+  String? passedPhoneNumber;
+
+  @override
+  void onInit() {
+    super.onInit();
+    // Retrieve the passed phone number
+    passedPhoneNumber = Get.arguments['formattedPhoneNumber'] ?? '';
+    log("Received Phone Number: $passedPhoneNumber");
+  }
+
+  final AuthRepo _authRepo = AuthRepo();
 
   @override
   void onClose() {
@@ -41,7 +53,6 @@ class MailOtpController extends GetxController {
       "Success",
       message,
       snackPosition: SnackPosition.BOTTOM,
-      //backgroundColor: Colors.green,
       colorText: Colors.black,
       borderRadius: 8,
       margin: const EdgeInsets.all(10),
@@ -49,34 +60,26 @@ class MailOtpController extends GetxController {
     );
   }
 
-  Future<void> sendOtpEmail() async {
+  Future<void> sendOtpEmailControll() async {
     if (emailController.text.isEmpty) {
       errorMessage.value = "Email cannot be empty";
       showErrorSnackbar(errorMessage.value);
       return;
     }
 
+    log("emailController == ${emailController.text}");
+
     isLoading.value = true;
     errorMessage.value = '';
 
-    final url = Uri.parse('http://74.208.201.247:443/api/v1/send-otp-email');
-    final headers = {'Content-Type': 'application/json'};
-    final body = jsonEncode({'email': emailController.text});
-
     try {
-      final response = await http.post(url, headers: headers, body: body);
+      final response = await _authRepo.sendOtpMailRepo({'email': emailController.text});
 
-      if (response.statusCode == 200) {
-        final responseBody = jsonDecode(response.body);
-        if (responseBody['status'] == true) {
-          toggleOtpSent(); // Toggle the state when OTP is successfully sent
-          showSuccessSnackbar("OTP sent successfully!");
-        } else {
-          errorMessage.value = responseBody['message'] ?? "Failed to send OTP";
-          showErrorSnackbar(errorMessage.value);
-        }
+      if (response['status'] == true) {
+        toggleOtpSent(); // Toggle the state when OTP is successfully sent
+        showSuccessSnackbar("OTP sent successfully!");
       } else {
-        errorMessage.value = "Server error: ${response.statusCode}";
+        errorMessage.value = response['message'] ?? "Failed to send OTP";
         showErrorSnackbar(errorMessage.value);
       }
     } catch (e) {
@@ -87,40 +90,33 @@ class MailOtpController extends GetxController {
     }
   }
 
-  Future<void> verifyOtp() async {
+  Future<void> verifyOtpMailControll() async {
     if (otpController.text.isEmpty) {
       errorMessage.value = "OTP cannot be empty";
-      showErrorSnackbar(errorMessage.value);
+      //showErrorSnackbar("Error", errorMessage.value, Icons.error, Colors.red);
       return;
     }
 
     isLoading.value = true;
     errorMessage.value = '';
 
-    final url = Uri.parse('http://74.208.201.247:443/api/v1/verify-otp-email');
-    final headers = {'Content-Type': 'application/json'};
-    final body = jsonEncode({
-      'email': emailController.text,
-      'otp': otpController.text,
-    });
-
-    log("otpController print ${otpController.text}");
+    log("otpController == ${otpController.text}");
 
     try {
-      final response = await http.post(url, headers: headers, body: body);
+      final response = await _authRepo.verifyOtpMailRepo({
+        'email': emailController.text,
+        'otp': otpController.text,
+      });
 
-      if (response.statusCode == 200) {
-        final responseBody = jsonDecode(response.body);
-        if (responseBody['status'] == true) {
-          // Handle successful OTP verification
-          showSuccessSnackbar("OTP verified successfully!");
-          Get.offAndToNamed('/signupScreen');
-        } else {
-          errorMessage.value = "Invalid OTP";
-          showErrorSnackbar(errorMessage.value);
-        }
+      log("otpController print ${otpController.text}");
+
+      if (response['status'] == true) {
+        // Handle successful OTP verification
+        showSuccessSnackbar("OTP verified successfully!");
+        Get.offAndToNamed('/signupScreen', arguments: {'passedPhoneNumber': passedPhoneNumber, 'emailController': emailController.text});
+        log("responseasdf ${response}");
       } else {
-        errorMessage.value = "Server error: ${response.statusCode}";
+        errorMessage.value = response['message'] ?? "Invalid OTP";
         showErrorSnackbar(errorMessage.value);
       }
     } catch (e) {
@@ -130,4 +126,5 @@ class MailOtpController extends GetxController {
       isLoading.value = false;
     }
   }
+
 }

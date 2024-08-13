@@ -321,24 +321,24 @@ class SignupScreen extends StatelessWidget {
                           controller.update(); // Ensure UI updates with GetBuilder
                         },
                       ),
-                      CustomImagePicker(
-                        heading: 'Vehicle License Image (Back side)',
-                        selectedImage: controller.selectedVehicleLicenseImageBackSide, // Pass the selected image
-                        onImagePicked: (File? image) {
-                          controller.selectedVehicleLicenseImageBackSide = image;
-                          controller.update(); // Ensure UI updates with GetBuilder
-                        },
-                      ),
+                      // CustomImagePicker(
+                      //   heading: 'Vehicle License Image (Back side)',
+                      //   selectedImage: controller.selectedVehicleLicenseImageBackSide, // Pass the selected image
+                      //   onImagePicked: (File? image) {
+                      //     controller.selectedVehicleLicenseImageBackSide = image;
+                      //     controller.update(); // Ensure UI updates with GetBuilder
+                      //   },
+                      // ),
 
                       const SizedBox(height: 10),
 
-                      const Text("Vehicle Images", style: TextStyle( fontSize: 16, color: Colors.black),),
-
-                      FileSelector(
-                        onFilesSelected: (files) {
-                          controller.onFilesSelected(files, context);
-                        },
-                      ),
+                      // const Text("Vehicle Images", style: TextStyle( fontSize: 16, color: Colors.black),),
+                      //
+                      // FileSelector(
+                      //   onFilesSelected: (files) {
+                      //     controller.onFilesSelected(files, context);
+                      //   },
+                      // ),
 
                       const SizedBox(height: 10),
 
@@ -434,6 +434,7 @@ class SignupScreen extends StatelessWidget {
                           }
                           return null;
                         },
+                        countryCode: controller.countryCode,
                       ),
 
 
@@ -462,14 +463,15 @@ class SignupScreen extends StatelessWidget {
                           controller.update(); // Ensure UI updates with GetBuilder
                         },
                       ),
-                      CustomImagePicker(
-                        heading: 'Insurance Image (Back side)',
-                        selectedImage: controller.selectedInsuranceImageBackSide, // Pass the selected image
-                        onImagePicked: (File? image) {
-                          controller.selectedInsuranceImageBackSide = image;
-                          controller.update(); // Ensure UI updates with GetBuilder
-                        },
-                      ),
+
+                      // CustomImagePicker(
+                      //   heading: 'Insurance Image (Back side)',
+                      //   selectedImage: controller.selectedInsuranceImageBackSide, // Pass the selected image
+                      //   onImagePicked: (File? image) {
+                      //     controller.selectedInsuranceImageBackSide = image;
+                      //     controller.update(); // Ensure UI updates with GetBuilder
+                      //   },
+                      // ),
 
                       const SizedBox(height: 60),
                       Row(
@@ -493,11 +495,12 @@ class SignupScreen extends StatelessWidget {
                             child: ShinyButton(
                               width: MediaQuery.of(context).size.width,
                               onTap: () {
-                                if (controller.registrationFormKey.currentState!.validate()) {
+                                //if (controller.registrationFormKey.currentState!.validate()) {
                                   // Proceed with registration or navigation to the next page
-                                  // Example: controller.gotonextpage();
+                                  controller.registerDriver();
+                                  print("print tap signup");
                                   // Replace 'gotonextpage' with your actual logic for navigation or submission
-                                }
+                               // }
                               },
                               color: const Color(0xff95D4E5),
                               borderRadius: BorderRadius.circular(10),

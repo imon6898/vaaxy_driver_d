@@ -13,6 +13,7 @@ class CustomPhoneNumberInput extends StatefulWidget {
   final String hintText;
   final bool filled;
   final String? Function(String? value)? validator;
+  final RxString countryCode; // Added countryCode as a parameter
 
   const CustomPhoneNumberInput({
     Key? key,
@@ -22,6 +23,7 @@ class CustomPhoneNumberInput extends StatefulWidget {
     this.hintText = 'Enter your phone number',
     this.filled = true,
     this.validator,
+    required this.countryCode, // Required countryCode
   }) : super(key: key);
 
   @override
@@ -100,6 +102,7 @@ class _CustomPhoneNumberInputState extends State<CustomPhoneNumberInput> {
       title: const Text('Select your phone code'),
       onValuePicked: (Country country) {
         selectedDialogCountry(country);
+        widget.countryCode.value = country.phoneCode; // Update the countryCode
         // Optionally, update controller for displaying selected country code
       },
       itemBuilder: _buildDialogItem,
@@ -144,4 +147,3 @@ class _PhoneNumberFormatter extends TextInputFormatter {
     );
   }
 }
-
