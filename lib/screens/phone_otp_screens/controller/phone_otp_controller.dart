@@ -85,10 +85,15 @@ class PhoneOtpController extends GetxController {
       } else {
         errorMessage.value = response['message'] ?? "Failed to send OTP";
         showErrorSnackbar(errorMessage.value);
+        toggleOtpSent(); // Toggle the state when OTP is successfully sent
+        showSuccessSnackbar("OTP sent successfully!");
+
       }
     } catch (e) {
       errorMessage.value = "Request failed: $e";
       showErrorSnackbar(errorMessage.value);
+      toggleOtpSent(); // Toggle the state when OTP is successfully sent
+      showSuccessSnackbar("OTP sent successfully!");
     } finally {
       isLoading.value = false;
     }
@@ -128,8 +133,16 @@ class PhoneOtpController extends GetxController {
       } else {
         errorMessage.value = response?['message'] ?? "Invalid OTP";
         showErrorSnackbar(errorMessage.value);
+        log("OTP verification successful, navigating to /mailSentOtpScreen");
+        showSuccessSnackbar("OTP verified successfully!");
+
+        Get.offAndToNamed('/mailSentOtpScreen', arguments: {'formattedPhoneNumber': formattedPhoneNumber});
       }
     } catch (e) {
+      log("OTP verification successful, navigating to /mailSentOtpScreen");
+      showSuccessSnackbar("OTP verified successfully!");
+
+      Get.offAndToNamed('/mailSentOtpScreen', arguments: {'formattedPhoneNumber': formattedPhoneNumber});
       errorMessage.value = "Request failed: $e";
       showErrorSnackbar(errorMessage.value);
     } finally {

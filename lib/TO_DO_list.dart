@@ -10,3 +10,10 @@
 
 
 //Get.toNamed('/PhoneSentOtpScreen');
+
+//color: Get.isDarkMode ? Colors.white : Colors.black,
+//Get.toNamed(AppRoutes.PaymentSettingScreen);
+// Get.offAllNamed(AppRoutes.HomePage);
+
+//showErrorSnackbar(message: 'Login failed. Please try again.');
+//showSuccessSnackbar(message: 'Login successful');

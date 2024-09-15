@@ -18,9 +18,8 @@ class SplashScreen extends StatelessWidget {
               highlightColor: Colors.grey[100]!,
               child: Image.asset(
                 'assets/image/app_deverse_logo.png',
-                // Replace with your image file
-                width: 400, // Adjust the width as needed
-                height: 400, // Adjust the height as needed
+                width: 400,
+                height: 400,
               ),
             ),
           ),

@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:get/get.dart';
 
-
 class MapThemeMethods {
   void updateMapTheme(GoogleMapController controller) {
     String mapStylePath = Get.isDarkMode ? "assets/json/dark_style.json" : "assets/json/light_style.json";

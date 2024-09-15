@@ -16,6 +16,7 @@ class HomeController extends GetxController {
   Position? currentPositionofDriver;
   Rx<MapType> currentMapType = MapType.normal.obs;
   var isDriverOnline = false.obs;
+  var accountStatus = 'approved'.obs;
 
   void toggleSidebar() {
     isSidebarOpen.value = !isSidebarOpen.value;
@@ -24,21 +25,55 @@ class HomeController extends GetxController {
   void toggleMapType() {
     if (currentMapType.value == MapType.normal) {
       currentMapType.value = MapType.hybrid;
+      update();
     } else {
       currentMapType.value = MapType.normal;
+      update();
     }
   }
+
+  Future<void> showPopupMenu(BuildContext context) async {
+    showMenu(
+      context: context,
+      position: RelativeRect.fromLTRB(100, 100, 100, 100),
+      items: [
+        PopupMenuItem(
+          value: 'light_mode',
+          child: ListTile(
+            leading: Icon(Icons.light_mode),
+            title: Text('Light Mode'),
+          ),
+        ),
+        PopupMenuItem(
+          value: 'dark_mode',
+          child: ListTile(
+            leading: Icon(Icons.dark_mode),
+            title: Text('Dark Mode'),
+          ),
+        ),
+      ],
+    ).then((value) async {
+      if (value == 'light_mode') {
+        Get.changeTheme(ThemeData.light());
+        String lightMapStyle = await mapThemeMethods.getJsonFileFromThemes("assets/json/light_style.json");
+        controllerGoogleMap!.setMapStyle(lightMapStyle);
+        update();
+      } else if (value == 'dark_mode') {
+        Get.changeTheme(ThemeData.dark());
+        String darkMapStyle = await mapThemeMethods.getJsonFileFromThemes("assets/json/dark_style.json");
+        controllerGoogleMap!.setMapStyle(darkMapStyle);
+        update();
+      }
+    });
+  }
+
 
   Future<void> checkLocationPermission() async {
     bool serviceEnabled;
     LocationPermission permission;
 
-    // Test if location services are enabled.
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      // Location services are not enabled, don't continue
-      // accessing the position and request users of the
-      // App to enable the location services.
       return Future.error('Location services are disabled.');
     }
 
@@ -46,23 +81,13 @@ class HomeController extends GetxController {
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        // Permissions are denied, next time you could try
-        // requesting permissions again (this is also where
-        // Android's shouldShowRequestPermissionRationale
-        // returned true. According to Android guidelines
-        // your App should show an explanatory UI now.
         return Future.error('Location permissions are denied');
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
-      // Permissions are denied forever, handle appropriately.
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
+      return Future.error('Location permissions are permanently denied, we cannot request permissions.');
     }
-
-    // When we reach here, permissions are granted and we can
-    // continue accessing the position of the device.
   }
 
   Future<void> getCurrentLiveLocationofDriver(BuildContext context) async {
@@ -72,9 +97,6 @@ class HomeController extends GetxController {
 
     LatLng positionofDriverInLatLag = LatLng(
         currentPositionofDriver!.latitude, currentPositionofDriver!.longitude);
-
-    // await CommonMethods.convertGeoGraphicCoOrdinatesIntoHumanReadableAddress(
-    //     currentPositionofDriver!, context);
 
     CameraPosition cameraPosition = CameraPosition(
         target: positionofDriverInLatLag, zoom: 15);

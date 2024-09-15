@@ -13,6 +13,11 @@ class ApiConstant {
   static const String signInDriver = "/api/v1/login";
   static const String signUpDriver = "/api/v1/signUp-driver";
 
+  static const String setCreditCardByUserId = "/api/v1/credit-card-setup";
+  static const String getCreditCardByUserId = "/api/v1/get-credit-card-by-userId";
+
+
+
 
 
   static const String endPointSendOTP= "/api/v1/send-otp";

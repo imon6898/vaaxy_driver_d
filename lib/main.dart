@@ -30,20 +30,18 @@ class MyApp extends StatelessWidget {
       designSize: const Size(360, 690),
       minTextAdapt: true,
       splitScreenMode: true,
-      builder: (context , child) {
+      builder: (context, child) {
         return GetMaterialApp(
           builder: FToastBuilder(),
           debugShowCheckedModeBanner: false,
           translations: TextConst(),
           locale: const Locale('en', 'UK'),
-          // translations will be displayed in that locale
           initialBinding: ViewModelBinding(),
           title: 'VaaXY Driver',
           theme: ThemeData(
             brightness: Brightness.light,
             primarySwatch: Colors.blue,
           ),
-          // initialRoute: AppRoutes.WelcomeScreen,
           initialRoute: AppRoutes.SplashScreen,
           getPages: AppPages.list,
         );

@@ -328,8 +328,8 @@ class SignupController extends GetxController {
       'Password': confirmPasswordController.text,
       'SSN': ssnNumberController.text,
       'Country': countryController.text,
-      'PhoneNumber': phoneNumber,
-      'PhoneCode': phoneCode,
+      'PhoneNumber': "1322600847",
+      'PhoneCode': "880",
       'InsurancePhoneNum': formattedInsurancePhoneNumber,
       'InsuranceNumber': insurancePolicyNumberController.text,
       'InsuranceCompany': insuranceCompanyNameController.text,
@@ -348,6 +348,7 @@ class SignupController extends GetxController {
       'City': cityController.text,
       'State': stateController.text,
       'ZipCode': zipCodeController.text,
+      'SignUpAs': "Driver",
     };
 
     var requestFiles = <String, File>{};

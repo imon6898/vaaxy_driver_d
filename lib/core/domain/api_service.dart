@@ -46,13 +46,14 @@ class ApiService {
     }
   }
 
-  Future<dynamic> get(String endpoint) async {
+  Future<dynamic> get(String endpoint, [Map<String, dynamic>? params]) async {
     res.Response response;
     try {
-
-      response = await _dio.get(endpoint);
+      // Send the GET request with query parameters if provided
+      response = await _dio.get(endpoint, queryParameters: params);
       return response;
-    } on DioException catch (e) {
+    } on res.DioException catch (e) {
+      // Handle error
       errorHandle(e: e, requestMethod: "get = $endpoint");
 
       log("Get api error data = ${e.response}");
@@ -303,3 +304,28 @@ SnackbarController showErrorSnackbar({required String message}) {
     ),
   );
 }
+
+
+
+SnackbarController showSuccessSnackbar({required String message}) {
+  return Get.showSnackbar(
+    GetSnackBar(
+      title: 'Success',
+      messageText: Text(
+        message,
+        style: TextStyle(color: Colors.black), // Set text color to black
+      ),
+      icon: Icon(Icons.check_circle, color: Colors.green),
+      snackPosition: SnackPosition.BOTTOM,
+      backgroundColor: Colors.transparent, // Make background transparent
+      borderRadius: 20,
+      margin: EdgeInsets.all(10),
+      duration: Duration(seconds: 3),
+      isDismissible: true,
+      dismissDirection: DismissDirection.horizontal,
+      forwardAnimationCurve: Curves.easeOutBack,
+      reverseAnimationCurve: Curves.slowMiddle,
+    ),
+  );
+}
+

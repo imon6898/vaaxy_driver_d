@@ -1,46 +1,47 @@
 import 'dart:convert';
-
 import 'package:get_storage/get_storage.dart';
 
 class Pref {
-  static String notifications = 'notifications';
+  static const String notifications = 'notifications';
+  static const String authToken = "authToken";
+  static const String userName = "userName";
+  static const String userPhoneNumber = "userPhoneNumber";
+  static const String userProfilePicture = "userProfilePicture"; // Added key for profile picture
 
   static String getValue(String keyWord) {
     final box = GetStorage();
-    return box.read(keyWord)??"";
+    return box.read(keyWord) ?? "";
   }
 
-  static Future<dynamic> setValue(String keyWord, String value) {
+  static Future<void> setValue(String keyWord, String value) async {
     final box = GetStorage();
-    return box.write(keyWord, value);
+    await box.write(keyWord, value);
   }
 
-  static Future<dynamic> removeValue(String keyWord) {
+  static Future<void> removeValue(String keyWord) async {
     final box = GetStorage();
-    return box.remove(keyWord);
+    await box.remove(keyWord);
   }
-  /// pass object to json
-  static Future<dynamic> setObject(String keyWord, dynamic object) {
-    return GetStorage().write(keyWord, json.encode(object));
+
+  /// Save an object as a JSON string.
+  static Future<void> setObject(String keyWord, dynamic object) async {
+    final box = GetStorage();
+    await box.write(keyWord, json.encode(object));
   }
-  ///  static ClassListModelResponse classListModelResponse = ClassListModelResponse.fromJson(Pref.getObject(KeyWord.CLASS_RESPONSE_MODEL));
-  static getObject(String keyWord) {
-    try{
-      return  json.decode(GetStorage().read(keyWord));
-    }catch(e){
+
+  /// Retrieve an object from JSON string.
+  static dynamic getObject(String keyWord) {
+    try {
+      final box = GetStorage();
+      final String? jsonString = box.read(keyWord);
+      return jsonString != null ? json.decode(jsonString) : null;
+    } catch (e) {
       return null;
     }
-
   }
 
-  static Future<dynamic> removeAllLocalData() {
+  static Future<void> removeAllLocalData() async {
     final box = GetStorage();
-    return box.erase();
+    await box.erase();
   }
-
-
-  static String authToken = "authToken";
-  static String userName = "userName";
-  static String userPhoneNumber = "userPhoneNumber";
-
 }
