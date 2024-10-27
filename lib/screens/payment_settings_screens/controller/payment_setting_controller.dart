@@ -83,6 +83,7 @@ class PaymentSettingController extends GetxController {
     log("email: ${CacheManager.email}");
     log("firstName: ${CacheManager.firstName}");
     log("signUpAs: ${CacheManager.signUpAs}");
+    log("driverIdAs: ${CacheManager.driverId}");
     fetchCardDetails();
   }
 

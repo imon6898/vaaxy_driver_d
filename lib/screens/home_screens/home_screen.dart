@@ -84,6 +84,7 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
             ),
+
             Positioned(
               top: 60,
               left: 100,
@@ -109,7 +110,7 @@ class HomeScreen extends StatelessWidget {
                           ),
                           onPressed: () {
                             if (!controller.isDriverOnline.value) {
-                              controller.toggleDriverOnlineStatus();
+                              // Show Modal Bottom Sheet to confirm going online
                               showModalBottomSheet(
                                 context: context,
                                 builder: (BuildContext context) {
@@ -119,14 +120,41 @@ class HomeScreen extends StatelessWidget {
                                       mainAxisSize: MainAxisSize.min,
                                       children: <Widget>[
                                         const Text(
-                                          'Driver is now online',
+                                          "GO TO ONLINE",
                                           style: TextStyle(fontSize: 18),
                                         ),
-                                        ElevatedButton(
-                                          onPressed: () {
-                                            Navigator.pop(context);
-                                          },
-                                          child: const Text('Close'),
+                                        const SizedBox(height: 16),
+                                        const Text(
+                                          'You are about to go online, you will become available to receive trip requests from users.',
+                                          style: TextStyle(fontSize: 18),
+                                        ),
+                                        const SizedBox(height: 16),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            // Cancel Button
+                                            ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: Colors.grey,
+                                              ),
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              child: const Text('Cancel'),
+                                            ),
+                                            // Ok Button
+                                            ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: Colors.green,
+                                              ),
+                                              onPressed: () {
+                                                // Toggle the driver online status
+                                                controller.toggleDriverOnlineStatus();
+                                                Navigator.pop(context);
+                                              },
+                                              child: const Text('Ok'),
+                                            ),
+                                          ],
                                         ),
                                       ],
                                     ),
@@ -154,7 +182,57 @@ class HomeScreen extends StatelessWidget {
                           ),
                           onPressed: () {
                             if (controller.isDriverOnline.value) {
-                              controller.toggleDriverOnlineStatus();
+                              // Show Modal Bottom Sheet to confirm going offline
+                              showModalBottomSheet(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return Container(
+                                    padding: const EdgeInsets.all(16.0),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: <Widget>[
+                                        const Text(
+                                          'GO TO OFFLINE',
+                                          style: TextStyle(fontSize: 18),
+                                        ),
+                                        const SizedBox(height: 16),
+                                        const Text(
+                                          'You are about to go offline, you will stop receiving new trip requests from users.',
+                                          style: TextStyle(fontSize: 18),
+                                        ),
+                                        const SizedBox(height: 16),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            // Cancel Button
+                                            ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: Colors.grey,
+                                              ),
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              child: const Text('Cancel'),
+                                            ),
+                                            // Ok Button
+                                            ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: Colors.redAccent,
+                                              ),
+                                              onPressed: () {
+                                                // Toggle the driver offline status
+                                                controller.toggleDriverOnlineStatus();
+                                                Navigator.pop(context);
+                                              },
+                                              child: const Text('Ok'),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              );
                             }
                           },
                           child: const Text('Offline'),
@@ -183,14 +261,14 @@ class HomeScreen extends StatelessWidget {
                     child: Center(
                       child: Text(
                         statusText,
-                        style: const TextStyle(
-                            fontSize: 18, color: Colors.white),
+                        style: const TextStyle(fontSize: 18, color: Colors.white),
                       ),
                     ),
                   );
                 }
               }),
             ),
+
 
             // Sidebar
             Obx(() {

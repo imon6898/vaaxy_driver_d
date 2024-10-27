@@ -10,11 +10,51 @@ class CacheManager {
   }
 
 
-  static String get token => _getFromCache<String>(CacheKeys.token.name);
-  static String get id => _getFromCache<String>(CacheKeys.id.name);
-  static String get email => _getFromCache<String>(CacheKeys.email.name);
-  static String get firstName => _getFromCache<String>(CacheKeys.firstName.name);
-  static String get signUpAs => _getFromCache<String>(CacheKeys.signUpAs.name);
+  // Getters with logs for debugging
+  static String get token {
+    var value = _getFromCache<String>(CacheKeys.token.name);
+    print("Token: $value");
+    return value;
+  }
+
+  static String get id {
+    var value = _getFromCache<String>(CacheKeys.id.name);
+    print("ID: $value");
+    return value;
+  }
+
+  static String get email {
+    var value = _getFromCache<String>(CacheKeys.email.name);
+    print("Email: $value");
+    return value;
+  }
+
+  static String get firstName {
+    var value = _getFromCache<String>(CacheKeys.firstName.name);
+    print("First Name: $value");
+    return value;
+  }
+
+  static String get signUpAs {
+    var value = _getFromCache<String>(CacheKeys.signUpAs.name);
+    print("Sign Up As: $value");
+    return value;
+  }
+
+  static String get driverId {
+    var value = _getFromCache<String>(CacheKeys.driverId.name);
+    print("Driver Id As: $value");
+    return value;
+  }
+
+
+
+  // static String get token => _getFromCache<String>(CacheKeys.token.name);
+  // static String get id => _getFromCache<String>(CacheKeys.id.name);
+  // static String get email => _getFromCache<String>(CacheKeys.email.name);
+  // static String get firstName => _getFromCache<String>(CacheKeys.firstName.name);
+  // static String get signUpAs => _getFromCache<String>(CacheKeys.signUpAs.name);
+  // static String get driverId => _getFromCache<String>(CacheKeys.driverId.name);
 
 
 
@@ -24,12 +64,14 @@ class CacheManager {
   static Future<bool> setEmail(String email) async => await _saveToCache(CacheKeys.email.name, email);
   static Future<bool> setFirstName(String firstName) async => await _saveToCache(CacheKeys.firstName.name, firstName);
   static Future<bool> setSignUpAs(String signUpAs) async => await _saveToCache(CacheKeys.signUpAs.name, signUpAs);
+  static Future<bool> setDriverId(String driverId) async => await _saveToCache(CacheKeys.driverId.name, driverId);
 
   static Future<bool> removeToken() async => _remove(CacheKeys.token.name);
   static Future<bool> removeId() async => _remove(CacheKeys.id.name);
   static Future<bool> removeEmail() async => _remove(CacheKeys.email.name);
   static Future<bool> removeFirstName() async => _remove(CacheKeys.firstName.name);
   static Future<bool> removeSignUpAs() async => _remove(CacheKeys.signUpAs.name);
+  static Future<bool> removeDriverId() async => _remove(CacheKeys.driverId.name);
 
   static Future<bool> _remove(String key) async {
     if(_pref == null) {
@@ -71,5 +113,6 @@ enum CacheKeys {
   id,
   email,
   firstName,
-  signUpAs
+  signUpAs,
+  driverId
 }

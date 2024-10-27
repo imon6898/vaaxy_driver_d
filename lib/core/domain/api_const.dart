@@ -15,6 +15,7 @@ class ApiConstant {
 
   static const String setCreditCardByUserId = "/api/v1/credit-card-setup";
   static const String getCreditCardByUserId = "/api/v1/get-credit-card-by-userId";
+  static const String postGoOnline = "/api/v1/go-online";
 
 
 

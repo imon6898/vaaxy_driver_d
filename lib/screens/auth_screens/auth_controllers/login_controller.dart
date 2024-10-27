@@ -96,6 +96,7 @@ class LoginController extends GetxController {
         CacheManager.setEmail(data['email'] ?? "");
         CacheManager.setFirstName(data['firstName'] ?? "");
         CacheManager.setSignUpAs(data['signUpAs'] ?? "");
+        CacheManager.setDriverId(data['driverId'] ?? "");
 
         // Pref.setValue(Pref.authToken, data['token'] ?? "");
         // Pref.setValue(Pref.userName, data['firstName'] ?? "");
