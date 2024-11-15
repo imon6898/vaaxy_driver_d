@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:vaaxy_driver/firebase_options.dart';
 import 'package:vaaxy_driver/routes/app_pages.dart';
 import 'package:vaaxy_driver/routes/app_routes.dart';
+import 'package:vaaxy_driver/services/network/signar_connection.dart';
 import 'package:vaaxy_driver/utlis/notification_helper.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:vaaxy_driver/utlis/text_const.dart';
@@ -17,6 +18,7 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await NotificationHelper.init();
+  SignalRConnection.init();
 
   runApp(const MyApp());
 }

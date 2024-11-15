@@ -26,7 +26,7 @@ class UserDi extends GetxController {
     String? userToken = prefsTwo.getString('auth_token',);
     log("userToken ==$userToken");
     // Retrieve auth token and other user data from local storage
-    authToken = prefsTwo.getString('auth_token',)!;
+    authToken = prefsTwo.getString('auth_token',) ?? '';
     // authToken = Pref.getValue(Pref.authToken);
     userName = prefsTwo.getString('firstName',)!;
     userPhone = prefsTwo.getString('email',)!;
