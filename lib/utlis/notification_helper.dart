@@ -1,17 +1,17 @@
 import 'dart:developer';
 
-import 'package:firebase_messaging/firebase_messaging.dart';
+// import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
 const String channelId = "mmhf_notification_id", channelName = "mmhf_notification_channel", channelDescription = "mmhf push notification";
 
-@pragma('vm:entry-point')
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  // showSimpleNotification(title: message.notification?.title ?? "mmhf", body: message.notification?.body ?? "", payload: message.data.toString());
-  print("Handling a background message: ${message.messageId}");
-}
+// @pragma('vm:entry-point')
+// Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+//   // showSimpleNotification(title: message.notification?.title ?? "mmhf", body: message.notification?.body ?? "", payload: message.data.toString());
+//   print("Handling a background message: ${message.messageId}");
+// }
 
 class NotificationHelper {
   static Future init() async {
@@ -24,7 +24,7 @@ class NotificationHelper {
       log("click onDidReceiveNotificationResponse: $details");
     });
 
-    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+    // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   }
 }
 

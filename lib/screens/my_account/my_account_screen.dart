@@ -8,37 +8,45 @@ class MyAccount extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<MyAccountController>(builder: (controller) {
-      return Scaffold(
-        appBar: AppBar(
-          title: const Text("My Account"),
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildProfileOverview(context),
-                const SizedBox(height: 20),
-                _buildAccountStatus(context),
-                const SizedBox(height: 20),
-                _buildContactInformation(context),
-                const SizedBox(height: 20),
-                _buildVehicleInformation(context),
-                const SizedBox(height: 20),
-                _buildOperationalDetails(context),
-                const SizedBox(height: 20),
-                _buildPersonalization(context),
-              ],
+    return GetBuilder<MyAccountController>(
+      builder: (controller) {
+        return Obx(() {
+          return Scaffold(
+            appBar: AppBar(
+              title: const Text("My Account"),
             ),
-          ),
-        ),
-      );
-    });
+            body: controller.isProfileLoading.value
+                ? const Center(
+              child: CircularProgressIndicator(),
+            )
+                : Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildProfileOverview(context, controller),
+                    const SizedBox(height: 20),
+                    _buildAccountStatus(context, controller),
+                    const SizedBox(height: 20),
+                    _buildContactInformation(context, controller),
+                    const SizedBox(height: 20),
+                    _buildVehicleInformation(context, controller),
+                    const SizedBox(height: 20),
+                    _buildOperationalDetails(context, controller),
+                    const SizedBox(height: 20),
+                    _buildPersonalization(context, controller),
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
+      },
+    );
   }
 
-  Widget _buildProfileOverview(BuildContext context) {
+  Widget _buildProfileOverview(BuildContext context, MyAccountController controller) {
     return Container(
       width: MediaQuery.sizeOf(context).width,
       padding: const EdgeInsets.all(16.0),
@@ -54,27 +62,27 @@ class MyAccount extends StatelessWidget {
           ),
         ],
       ),
-      child: const Column(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Center(
             child: CircleAvatar(
               radius: 50,
-              backgroundImage: AssetImage('assets/profile_picture.png'),
-              // You can use Image.network for a remote image
+              backgroundImage: NetworkImage(controller.picture.value ?? ''),
             ),
           ),
-          SizedBox(height: 10),
-          Text("Name: John Doe", style: TextStyle(fontSize: 16)),
-          Text("Rating: ⭐⭐⭐⭐ (4.5)", style: TextStyle(fontSize: 16)),
-          Text("Rides Completed: 120", style: TextStyle(fontSize: 16)),
+          const SizedBox(height: 10),
+          Text("Name: ${controller.firstName.value ?? ''} ${controller.lastName.value ?? ''}",
+              style: const TextStyle(fontSize: 16)),
+          Text("Rating: ⭐⭐⭐⭐ (4.5)", style: const TextStyle(fontSize: 16)),
+          Text("Rides Completed: 120", style: const TextStyle(fontSize: 16)),
         ],
       ),
     );
   }
 
-  Widget _buildAccountStatus(BuildContext context) {
+  Widget _buildAccountStatus(BuildContext context, MyAccountController controller) {
     return Container(
       width: MediaQuery.sizeOf(context).width,
       padding: const EdgeInsets.all(16.0),
@@ -95,9 +103,9 @@ class MyAccount extends StatelessWidget {
         children: [
           Text("Account Status", style: Theme.of(context).textTheme.titleLarge),
           const SizedBox(height: 10),
-          const Text(
+          Text(
             "Status: Approved", // Or "Pending" based on the account's status
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 16,
               color: Colors.green, // Change color based on status
             ),
@@ -107,7 +115,7 @@ class MyAccount extends StatelessWidget {
     );
   }
 
-  Widget _buildContactInformation(BuildContext context) {
+  Widget _buildContactInformation(BuildContext context, MyAccountController controller) {
     return Container(
       width: MediaQuery.sizeOf(context).width,
       padding: const EdgeInsets.all(16.0),
@@ -128,14 +136,14 @@ class MyAccount extends StatelessWidget {
         children: [
           Text("Contact Information", style: Theme.of(context).textTheme.titleLarge),
           const SizedBox(height: 10),
-          const Text("Phone Number: (123) 456-7890", style: TextStyle(fontSize: 16)),
-          const Text("Email Address: johndoe@example.com", style: TextStyle(fontSize: 16)),
+          Text("Phone Number: ${controller.phoneNumber.value ?? ''}", style: const TextStyle(fontSize: 16)),
+          Text("Email Address: ${controller.email.value ?? ''}", style: const TextStyle(fontSize: 16)),
         ],
       ),
     );
   }
 
-  Widget _buildVehicleInformation(BuildContext context) {
+  Widget _buildVehicleInformation(BuildContext context, MyAccountController controller) {
     return Container(
       width: MediaQuery.sizeOf(context).width,
       padding: const EdgeInsets.all(16.0),
@@ -156,16 +164,16 @@ class MyAccount extends StatelessWidget {
         children: [
           Text("Vehicle Information", style: Theme.of(context).textTheme.titleLarge),
           const SizedBox(height: 10),
-          const Text("Make and Model: Toyota Camry", style: TextStyle(fontSize: 16)),
-          const Text("License Plate: ABC1234", style: TextStyle(fontSize: 16)),
-          const Text("Color: Blue", style: TextStyle(fontSize: 16)),
-          const Text("Insurance: Valid until 12/2024", style: TextStyle(fontSize: 16)),
+          Text("Make and Model: ${controller.modal.value ?? ''}", style: const TextStyle(fontSize: 16)),
+          Text("License Plate: ${controller.numberPlate.value ?? ''}", style: const TextStyle(fontSize: 16)),
+          Text("Color: ${controller.color.value ?? ''}", style: const TextStyle(fontSize: 16)),
+          Text("Insurance: Valid until ${controller.expirationDate.value ?? ''}", style: const TextStyle(fontSize: 16)),
         ],
       ),
     );
   }
 
-  Widget _buildOperationalDetails(BuildContext context) {
+  Widget _buildOperationalDetails(BuildContext context, MyAccountController controller) {
     return Container(
       width: MediaQuery.sizeOf(context).width,
       padding: const EdgeInsets.all(16.0),
@@ -186,18 +194,15 @@ class MyAccount extends StatelessWidget {
         children: [
           Text("Operational Details", style: Theme.of(context).textTheme.titleLarge),
           const SizedBox(height: 10),
-          const Text("Driver ID: DR123456", style: TextStyle(fontSize: 16)),
-          const Text("Status: Available", style: TextStyle(fontSize: 16)),
-          const Text("Earnings: \$500 (Last Week)", style: TextStyle(fontSize: 16)),
-          const SizedBox(height: 10),
-          const Text("Trip History:", style: TextStyle(fontSize: 16)),
-          // You can add a ListView here for trip details
+          Text("Driver ID: ${controller.driverId.value ?? ''}", style: const TextStyle(fontSize: 16)),
+          Text("Status: Available", style: const TextStyle(fontSize: 16)),
+          Text("Earnings: \$500 (Last Week)", style: const TextStyle(fontSize: 16)),
         ],
       ),
     );
   }
 
-  Widget _buildPersonalization(BuildContext context) {
+  Widget _buildPersonalization(BuildContext context, MyAccountController controller) {
     return Container(
       width: MediaQuery.sizeOf(context).width,
       padding: const EdgeInsets.all(16.0),
@@ -218,7 +223,8 @@ class MyAccount extends StatelessWidget {
         children: [
           Text("Personalization", style: Theme.of(context).textTheme.titleLarge),
           const SizedBox(height: 10),
-          const Text("Bio: Experienced driver with a passion for providing excellent service.", style: TextStyle(fontSize: 16)),
+          const Text("Bio: Experienced driver with a passion for providing excellent service.",
+              style: TextStyle(fontSize: 16)),
           const SizedBox(height: 10),
           const Text("Vehicle Photo:", style: TextStyle(fontSize: 16)),
           const SizedBox(height: 10),
@@ -226,7 +232,12 @@ class MyAccount extends StatelessWidget {
             width: double.infinity,
             height: 150,
             color: Colors.grey[300],
-            child: const Center(child: Text("Upload Vehicle Photo")),
+            child: Center(
+              child: Text(
+                controller.vehicleCopy.value ?? 'Upload Vehicle Photo',
+                style: const TextStyle(fontSize: 16),
+              ),
+            ),
           ),
         ],
       ),

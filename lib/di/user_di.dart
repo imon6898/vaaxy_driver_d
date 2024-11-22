@@ -1,5 +1,5 @@
 import 'dart:developer';
-import 'package:firebase_messaging/firebase_messaging.dart';
+// import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vaaxy_driver/model/OfferResponseModel.dart';
@@ -19,7 +19,7 @@ class UserDi extends GetxController {
   @override
   Future<void> onInit() async {
     super.onInit();
-    fcmToken = await FirebaseMessaging.instance.getToken() ?? '';
+    // fcmToken = await FirebaseMessaging.instance.getToken() ?? '';
     log("fcm token of the device = $fcmToken");
 
     SharedPreferences prefsTwo = await SharedPreferences.getInstance();
@@ -38,7 +38,7 @@ class UserDi extends GetxController {
   }
 
   void callFCMToken() async{
-    fcmToken = await FirebaseMessaging.instance.getToken()??'09jhgv';
+    // fcmToken = await FirebaseMessaging.instance.getToken()??'09jhgv';
     log("fcm token of the device = $fcmToken");
   }
 }

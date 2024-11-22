@@ -69,6 +69,7 @@ class LoginController extends GetxController {
       if (data != null && data['token'] != null) {
         // Successful login
         //await _saveLoginData(data);
+        log('check user token..: ${ data}');
         log('check user token..: ${ data['token'] ?? ""}');
         SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setString( "auth_token",data['token']);
@@ -89,6 +90,7 @@ class LoginController extends GetxController {
         userDi.userName = data['firstName'] ?? "";
         userDi.userPhone = data['email'] ?? "";
         userDi.userProfilePicture = data['picture'] ?? "";
+
 
 
         CacheManager.setId(data['id'] ?? "");

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_geofire/flutter_geofire.dart';
+// import 'package:flutter_geofire/flutter_geofire.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -110,7 +110,7 @@ class HomeController extends GetxController {
 
   getCurrentLiveLocationOfUser() async {
     positionOfUser(await _determinePosition());
-    initializeGeoFireListener();
+    // initializeGeoFireListener();
     var responseFromAPI = await HttpRequests.get(
         "https://maps.googleapis.com/maps/api/geocode/json?latlng=${positionOfUser.value?.latitude},${positionOfUser.value?.longitude}&key=$googleMapKey"
     );
@@ -123,53 +123,53 @@ class HomeController extends GetxController {
     controllerGoogleMap!.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
   }
 
-  initializeGeoFireListener() {
-    Geofire.initialize("onlineDrivers");
-    double radius = 22;
-    Geofire.queryAtLocation(positionOfUser.value!.latitude, positionOfUser.value!.longitude, radius)!.listen((driverEvent) {
-      if (driverEvent != null) {
-        switch (driverEvent["callBack"]) {
-          case Geofire.onKeyEntered:
-            nearbyOnlineDriversList.add(OnlineNearbyDrivers(
-                uidDriver: driverEvent["key"],
-                latDriver: driverEvent["latitude"],
-                lngDriver: driverEvent["longitude"]
-            ));
-            if (nearbyOnlineDriversKeysLoaded == true) {
-              // if(Get.isRegistered<HireController>()) {
-              //   Get.find<HireController>().updateAvailableNearbyOnlineDriversOnMap(); //update drivers on google map
-              // }
-            }
-            break;
-
-          case Geofire.onKeyExited:
-            removeDriverFromList(driverEvent["key"]);
-            // if(Get.isRegistered<HireController>()) {
-            //   Get.find<HireController>().updateAvailableNearbyOnlineDriversOnMap(); //update drivers on google map
-            // }
-            break;
-
-          case Geofire.onKeyMoved:
-            updateOnlineNearbyDriversLocation(OnlineNearbyDrivers(
-                uidDriver: driverEvent["key"],
-                latDriver: driverEvent["latitude"],
-                lngDriver: driverEvent["longitude"]
-            ));
-            // if(Get.isRegistered<HireController>()){
-            //   Get.find<HireController>().updateAvailableNearbyOnlineDriversOnMap(); //update drivers on google map
-            // }
-            break;
-
-          case Geofire.onGeoQueryReady:
-            nearbyOnlineDriversKeysLoaded = true;
-            // if(Get.isRegistered<HireController>()) {
-            //   Get.find<HireController>().updateAvailableNearbyOnlineDriversOnMap(); //update drivers on google map
-            // }
-            break;
-        }
-      }
-    });
-  }
+  // initializeGeoFireListener() {
+  //   Geofire.initialize("onlineDrivers");
+  //   double radius = 22;
+  //   Geofire.queryAtLocation(positionOfUser.value!.latitude, positionOfUser.value!.longitude, radius)!.listen((driverEvent) {
+  //     if (driverEvent != null) {
+  //       switch (driverEvent["callBack"]) {
+  //         case Geofire.onKeyEntered:
+  //           nearbyOnlineDriversList.add(OnlineNearbyDrivers(
+  //               uidDriver: driverEvent["key"],
+  //               latDriver: driverEvent["latitude"],
+  //               lngDriver: driverEvent["longitude"]
+  //           ));
+  //           if (nearbyOnlineDriversKeysLoaded == true) {
+  //             // if(Get.isRegistered<HireController>()) {
+  //             //   Get.find<HireController>().updateAvailableNearbyOnlineDriversOnMap(); //update drivers on google map
+  //             // }
+  //           }
+  //           break;
+  //
+  //         case Geofire.onKeyExited:
+  //           removeDriverFromList(driverEvent["key"]);
+  //           // if(Get.isRegistered<HireController>()) {
+  //           //   Get.find<HireController>().updateAvailableNearbyOnlineDriversOnMap(); //update drivers on google map
+  //           // }
+  //           break;
+  //
+  //         case Geofire.onKeyMoved:
+  //           updateOnlineNearbyDriversLocation(OnlineNearbyDrivers(
+  //               uidDriver: driverEvent["key"],
+  //               latDriver: driverEvent["latitude"],
+  //               lngDriver: driverEvent["longitude"]
+  //           ));
+  //           // if(Get.isRegistered<HireController>()){
+  //           //   Get.find<HireController>().updateAvailableNearbyOnlineDriversOnMap(); //update drivers on google map
+  //           // }
+  //           break;
+  //
+  //         case Geofire.onGeoQueryReady:
+  //           nearbyOnlineDriversKeysLoaded = true;
+  //           // if(Get.isRegistered<HireController>()) {
+  //           //   Get.find<HireController>().updateAvailableNearbyOnlineDriversOnMap(); //update drivers on google map
+  //           // }
+  //           break;
+  //       }
+  //     }
+  //   });
+  // }
 
   void removeDriverFromList(String driverID)
   {
@@ -234,6 +234,8 @@ class HomeController extends GetxController {
         "isOnline": isDriverOnline.value ? "0" : "1",
       };
 
+
+      print("go online payload: $params");
       // Make the API call to go online/offline
       final response = await homeRepo.goOnlineOfflineRepo(params);
 
