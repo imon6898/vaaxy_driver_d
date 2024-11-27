@@ -67,6 +67,13 @@ class LoginController extends GetxController {
       // Check if the response contains the necessary data
       // Check if the response contains the necessary data
       if (data != null && data['token'] != null) {
+
+        await CacheManager.setId(data['id'] ?? "");
+        await CacheManager.setToken(data['token'] ?? "");
+        await CacheManager.setEmail(data['email'] ?? "");
+        await CacheManager.setFirstName(data['firstName'] ?? "");
+        await CacheManager.setSignUpAs(data['signUpAs'] ?? "");
+        await CacheManager.setDriverId(data['driverId'] ?? "");
         // Successful login
         //await _saveLoginData(data);
         log('check user token..: ${ data}');
@@ -93,17 +100,35 @@ class LoginController extends GetxController {
 
 
 
-        CacheManager.setId(data['id'] ?? "");
-        CacheManager.setToken(data['token'] ?? "");
-        CacheManager.setEmail(data['email'] ?? "");
-        CacheManager.setFirstName(data['firstName'] ?? "");
-        CacheManager.setSignUpAs(data['signUpAs'] ?? "");
-        CacheManager.setDriverId(data['driverId'] ?? "");
+        await CacheManager.setId(data['id'] ?? "");
+        await CacheManager.setToken(data['token'] ?? "");
+        await CacheManager.setEmail(data['email'] ?? "");
+        await CacheManager.setFirstName(data['firstName'] ?? "");
+        await CacheManager.setSignUpAs(data['signUpAs'] ?? "");
+        await CacheManager.setDriverId(data['driverId'] ?? "");
 
-        // Pref.setValue(Pref.authToken, data['token'] ?? "");
-        // Pref.setValue(Pref.userName, data['firstName'] ?? "");
-        // Pref.setValue(Pref.userPhoneNumber, data['email'] ?? "");
-        // Pref.setValue(Pref.userProfilePicture, data['picture'] ?? "");
+
+        // CacheManager.setId((data['id'] is int) ? data['id'].toString() : "");
+        // print("ID: ${data['id'] ?? ""} | Type: ${(data['id'] is int) ? 'int' : 'String'}");
+        //
+        // CacheManager.setToken(data['token'] ?? "");
+        // print("Token: ${data['token'] ?? ""} | Type: ${data['token']?.runtimeType}");
+        //
+        // CacheManager.setEmail(data['email'] ?? "");
+        // print("Email: ${data['email'] ?? ""} | Type: ${data['email']?.runtimeType}");
+        //
+        // CacheManager.setFirstName(data['firstName'] ?? "");
+        // print("First Name: ${data['firstName'] ?? ""} | Type: ${data['firstName']?.runtimeType}");
+        //
+        // CacheManager.setSignUpAs(data['signUpAs'] ?? "");
+        // print("Sign Up As: ${data['signUpAs'] ?? ""} | Type: ${data['signUpAs']?.runtimeType}");
+        //
+        // CacheManager.setDriverId((data['driverId'] is int) ? data['driverId'].toString() : "");
+        print("Driver ID: ${data['driverId'] ?? ""} | Type: ${(data['driverId'] is int) ? 'int' : 'String'}");
+        Pref.setValue(Pref.authToken, data['token'] ?? "");
+        Pref.setValue(Pref.userName, data['firstName'] ?? "");
+        Pref.setValue(Pref.userPhoneNumber, data['email'] ?? "");
+        Pref.setValue(Pref.userProfilePicture, data['picture'] ?? "");
 
         Get.offAndToNamed(AppRoutes.HomeScreen);
         //_showSnackbar('Success', 'Login successful');

@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vaaxy_driver/global/global_var.dart';
+import 'package:vaaxy_driver/services/network/signar_connection.dart';
 import '../../routes/app_routes.dart';
 import '../../utlis/pref/pref.dart';
+import '../auth_screens/login_screen.dart';
 import 'home_controllers/home_controller.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -147,8 +150,9 @@ class HomeScreen extends StatelessWidget {
                                               style: ElevatedButton.styleFrom(
                                                 backgroundColor: Colors.green,
                                               ),
-                                              onPressed: () {
+                                              onPressed: () async {
                                                 // Toggle the driver online status
+                                                SignalRConnection.sendMessage(<Object>['gfttyjghu']);
                                                 controller.toggleDriverOnlineStatus();
                                                 Navigator.pop(context);
                                               },
@@ -448,8 +452,11 @@ class HomeScreen extends StatelessWidget {
                                 title: const Text('Log Out'),
                                 trailing: const Icon(Icons.logout),
                                 onTap: () async {
+                                  SharedPreferences prefs = await SharedPreferences.getInstance();
                                   await Pref.removeAllLocalData();  // Clear all stored user data
-                                  Get.offAllNamed('/authSelectScreen');  // Navigate to the login screen
+                                  await prefs.clear();
+                                  // Get.offAllNamed('/authSelectScreen');  // Navigate to the login screen
+                                  Get.offAll(LoginScreen());
                                 },
                               ),
                             ],

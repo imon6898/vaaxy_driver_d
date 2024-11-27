@@ -36,18 +36,19 @@ class HttpRequests {
     return _token;
   }
 
-  static Future post(String path, {body}) async {
+  static Future post(String path, {body, header}) async {
     Uri uri = Uri.parse("${ApiRoutes.prefix}$path");
     var request = await http.post(
       uri,
-      headers: {
+      headers:{
         'Accept': 'application/json',
+        'Content-Type': 'application/json',
         'Authorization': 'Bearer $_token',
       },
       body: body
     );
-
-    print("$path-> ${request.body}");
+    print('header: $header');
+    print("$path|${request.statusCode}-> ${request.body}");
 
     if(request.statusCode == 400) {
       return jsonDecode(request.body);

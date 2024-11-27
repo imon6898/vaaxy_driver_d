@@ -28,18 +28,18 @@
             android:name="com.example.NOTIFICATION_CHANNEL_ID"
             android:value="vaaxy_driver_notification_id"/>
 
-        <!-- Firebase Receivers -->
-        <receiver
-            android:name="com.google.firebase.iid.FirebaseInstanceIdInternalReceiver"
-            android:exported="false"/>
-        <receiver
-            android:name="com.google.firebase.iid.FirebaseInstanceIdReceiver"
-            android:permission="com.google.android.c2dm.permission.SEND">
-            <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
-                <category android:name="${applicationId}"/>
-            </intent-filter>
-        </receiver>
+<!--        &lt;!&ndash; Firebase Receivers &ndash;&gt;-->
+<!--        <receiver-->
+<!--            android:name="com.google.firebase.iid.FirebaseInstanceIdInternalReceiver"-->
+<!--            android:exported="false"/>-->
+<!--        <receiver-->
+<!--            android:name="com.google.firebase.iid.FirebaseInstanceIdReceiver"-->
+<!--            android:permission="com.google.android.c2dm.permission.SEND">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="com.google.android.c2dm.intent.RECEIVE"/>-->
+<!--                <category android:name="${applicationId}"/>-->
+<!--            </intent-filter>-->
+<!--        </receiver>-->
 
         <!-- Main Activity -->
         <activity

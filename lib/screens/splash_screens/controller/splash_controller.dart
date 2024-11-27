@@ -44,6 +44,7 @@ class SplashScreenController extends GetxController with GetTickerProviderStateM
         CacheManager.initAuth((pref) {
 
         });
+        print('cache manager auth token: ${CacheManager.token}');
         Get.offAndToNamed('/homeScreen');
       } else {
         Get.offAndToNamed('/authSelectScreen');

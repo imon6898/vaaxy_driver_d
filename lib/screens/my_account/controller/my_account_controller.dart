@@ -41,7 +41,7 @@ class MyAccountController extends GetxController {
 
   RxBool isProfileLoading = RxBool(false);
 
-  void getProfileData() async {
+  Future<void> getProfileData() async {
     isProfileLoading.value = true;
 
     try {
@@ -72,7 +72,7 @@ class MyAccountController extends GetxController {
         vehicleCopy.value = profile['vehicleCopy'] ?? '';
         numberPlate.value = profile['numberPlate'] ?? '';
         capacity.value = profile['capacity'] ?? '';
-        launchYear.value = profile['launchYear'] ?? '';
+        launchYear.value = profile['launchYear'] ?? 'N/A';
         color.value = profile['color'] ?? '';
         modal.value = profile['modal'] ?? '';
         brand.value = profile['brand'] ?? '';
