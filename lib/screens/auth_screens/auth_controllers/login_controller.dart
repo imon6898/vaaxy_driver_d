@@ -86,6 +86,7 @@ class LoginController extends GetxController {
         await prefs.setString ("firstName",data['firstName'] ?? "");
         await prefs.setString ("email",data['email'] ?? "");
         await prefs.setString ("picture",data['picture'] ?? "");
+        await prefs.setString ("pictureBase64",data['pictureBase64'] ?? "");
 
 
         SharedPreferences prefsTwo = await SharedPreferences.getInstance();

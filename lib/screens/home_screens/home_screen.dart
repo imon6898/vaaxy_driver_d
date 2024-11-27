@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -11,27 +14,214 @@ import '../auth_screens/login_screen.dart';
 import 'home_controllers/home_controller.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  HomeScreen({super.key});
+
+  RxBool isRideCardVisible = false.obs;
 
   @override
   Widget build(BuildContext context) {
+
     return GetBuilder<HomeController>(builder: (controller) {
       return Scaffold(
         body: Stack(
           children: [
-            GoogleMap(
-              padding: const EdgeInsets.only(top: 26),
-              mapType: controller.currentMapType.value,
-              myLocationEnabled: true,
-              polylines: controller.polylineSet,
-              markers: controller.markerSet,
-              circles: controller.circleSet,
-              initialCameraPosition: googlePlexInitialPosition,
-              onMapCreated: (GoogleMapController mapController) {
-                controller.controllerGoogleMap = mapController;
-                controller.mapThemeMethods.updateMapTheme(mapController);
-              },
+            if(controller.positionOfUser.value!=null)Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: controller.isRideCardVisible.value
+                  ? MediaQuery.of(context).size.height * 0.45
+                  : 0,
+              child: GoogleMap(
+                padding: const EdgeInsets.only(top: 26),
+                mapType: controller.currentMapType.value,
+                myLocationEnabled: true,
+                polylines: controller.polylineSet.value,
+                markers: Set<Marker>.of(controller.markerSet.values),
+                circles: controller.circleSet.value,
+                initialCameraPosition: CameraPosition(
+                  target: LatLng(
+                    controller.positionOfUser.value!.latitude,
+                    controller.positionOfUser.value!.longitude,
+                  ),
+                  zoom: 12,
+                ),
+                onMapCreated: controller.onMapCreated,
+              ),
             ),
+            // Card displaying rider information
+            if (controller.isRideCardVisible.value)
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: 0,
+                height: MediaQuery.of(context).size.height * 0.45,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(16.0),
+                      topRight: Radius.circular(16.0),
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 10.0,
+                        offset: const Offset(0, -2),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    children: [
+                      // Rider details
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                ClipOval(
+                                  child: Image.memory(
+                                    base64Decode(controller.rideData['pictureBase64']),
+                                    width: 60,
+                                    height: 60,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                const SizedBox(width: 12.0),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        controller.rideData['riderName'] ?? '',
+                                        style: const TextStyle(
+                                          fontSize: 18.0,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 4.0),
+                                      Text(
+                                        controller.rideData['phoneNumber'] ?? '',
+                                        style: const TextStyle(fontSize: 14.0),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const Icon(Icons.phone, color: Colors.green),
+                              ],
+                            ),
+                            const SizedBox(height: 16.0),
+                            Text(
+                              'Pickup: ${controller.rideData['from'] ?? ''}',
+                              style: const TextStyle(fontSize: 16.0),
+                            ),
+                            const SizedBox(height: 8.0),
+                            Text(
+                              'Drop-off: ${controller.rideData['to'] ?? ''}',
+                              style: const TextStyle(fontSize: 16.0),
+                            ),
+                            const SizedBox(height: 16.0),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      'Distance',
+                                      style: TextStyle(
+                                        fontSize: 14.0,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                    Text(
+                                      '${controller.rideData['distance']} km',
+                                      style: const TextStyle(
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      'Price',
+                                      style: TextStyle(
+                                        fontSize: 14.0,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                    Text(
+                                      '\$${controller.rideData['ridePrice']}',
+                                      style: const TextStyle(
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      const Spacer(),
+                      // Start Ride Button
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: SizedBox(
+                          width: double.infinity,
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.red,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8.0),
+                                    ),
+                                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                                  ),
+                                  onPressed: () {
+                                    controller.cancelRide();
+                                  },
+                                  child: const Text(
+                                    'Cancel Ride',
+                                    style: TextStyle(fontSize: 18.0, color: Colors.white),
+                                  ),
+                                ),
+                              ),
+                              const Gap(10),
+                              Expanded(
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.green,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8.0),
+                                    ),
+                                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                                  ),
+                                  onPressed: () {
+                                    controller.startRide();
+                                  },
+                                  child: const Text(
+                                    'Start Ride',
+                                    style: TextStyle(fontSize: 18.0, color: Colors.white),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             Positioned(
               top: 60,
               left: 20,
@@ -88,7 +278,7 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
 
-            Positioned(
+            if(!controller.isRideCardVisible.value)Positioned(
               top: 60,
               left: 100,
               right: 100,
@@ -414,7 +604,7 @@ class HomeScreen extends StatelessWidget {
                                   // Handle sidebar menu tap
                                 },
                               ),
-                        
+
                               ListTile(
                                 title: const Text('Terms & Condition'),
                                 trailing: SvgPicture.asset(
@@ -492,4 +682,5 @@ class HomeScreen extends StatelessWidget {
       );
     });
   }
+
 }

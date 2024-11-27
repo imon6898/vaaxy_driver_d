@@ -53,7 +53,7 @@ class AppPages {
 
     GetPage(
       name: AppRoutes.HomeScreen,
-      page: () => const HomeScreen(),
+      page: () => HomeScreen(),
     ),
 
     GetPage(
