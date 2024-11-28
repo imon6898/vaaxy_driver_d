@@ -64,9 +64,20 @@ class HomeController extends GetxController {
   };
 
   final HomeRepo homeRepo = HomeRepo();
+  Uint8List? decodedImage;
+  String? driverName = CacheManager.firstName;
 
   @override
   void onInit() {
+
+
+    String? base64Image = CacheManager.pictureBase64;
+
+    // Decode the base64 string to a Uint8List if it is not null
+    if (base64Image != null && base64Image.isNotEmpty) {
+      decodedImage = base64Decode(base64Image);
+    }
+
     getCurrentLiveLocationOfUser();
     super.onInit();
   }

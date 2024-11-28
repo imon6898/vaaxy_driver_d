@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
@@ -22,6 +23,8 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return GetBuilder<HomeController>(builder: (controller) {
+      Uint8List? decodedImage = controller.decodedImage;
+
       return Scaffold(
         body: Stack(
           children: [
@@ -137,7 +140,8 @@ class HomeScreen extends StatelessWidget {
                                       ),
                                     ),
                                     Text(
-                                      '${controller.rideData['distance']} km',
+                                      '${double.parse(controller.rideData['distance'].toString()).toStringAsFixed(2)}km',
+                                      //'${controller.rideData['distance']} km',
                                       style: const TextStyle(
                                         fontSize: 16.0,
                                         fontWeight: FontWeight.bold,
@@ -156,7 +160,9 @@ class HomeScreen extends StatelessWidget {
                                       ),
                                     ),
                                     Text(
-                                      '\$${controller.rideData['ridePrice']}',
+                                      '${double.parse(controller.rideData['ridePrice'].toString()).toStringAsFixed(2)}',
+
+                                      //'\$${controller.rideData['ridePrice']}',
                                       style: const TextStyle(
                                         fontSize: 16.0,
                                         fontWeight: FontWeight.bold,
@@ -514,26 +520,34 @@ class HomeScreen extends StatelessWidget {
                                             Row(
                                               children: [
                                                 ClipOval(
-                                                  child: SvgPicture.asset(
-                                                    "assets/svg/avatar-svgrepo-com.svg",
+                                                  child: decodedImage != null
+                                                  // Display the image if decodedImage is not null
+                                                      ? Image.memory(
+                                                    decodedImage,
+                                                    width: 60.0,
+                                                    height: 60.0,
+                                                    fit: BoxFit.cover,
+                                                  )
+                                                      : SvgPicture.asset(
+                                                    "assets/svg/avatar-svgrepo-com.svg",  // Fallback SVG
                                                     width: 60.0,
                                                     height: 60.0,
                                                     fit: BoxFit.cover,
                                                   ),
                                                 ),
                                                 const SizedBox(width: 10.0),
-                                                const Column(
+                                                Column(
                                                   crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                                   children: [
                                                     Text(
-                                                      "User Name",
-                                                      style: TextStyle(
+                                                      controller.driverName.toString(),
+                                                      style: const TextStyle(
                                                           fontSize: 18.0,
                                                           fontWeight:
                                                           FontWeight.bold),
                                                     ),
-                                                    Row(
+                                                    const Row(
                                                       children: [
                                                         Icon(Icons.star,
                                                             color: Colors.yellow,
@@ -546,7 +560,7 @@ class HomeScreen extends StatelessWidget {
                                                         ),
                                                       ],
                                                     ),
-                                                    Text(
+                                                    const Text(
                                                       "Vehicle Name",
                                                       style: TextStyle(
                                                           fontSize: 16.0),

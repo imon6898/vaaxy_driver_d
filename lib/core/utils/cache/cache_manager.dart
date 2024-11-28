@@ -47,6 +47,12 @@ class CacheManager {
     return value;
   }
 
+  static String get pictureBase64 {
+    var value = _getFromCache<String>(CacheKeys.pictureBase64.name);
+    print("Picture Base64: $value");
+    return value ?? ""; // Handle null gracefully
+  }
+
 
 
   // static String get token => _getFromCache<String>(CacheKeys.token.name);
@@ -65,6 +71,7 @@ class CacheManager {
   static Future<bool> setFirstName(String firstName) async => await _saveToCache(CacheKeys.firstName.name, firstName);
   static Future<bool> setSignUpAs(String signUpAs) async => await _saveToCache(CacheKeys.signUpAs.name, signUpAs);
   static Future<bool> setDriverId(String driverId) async => await _saveToCache(CacheKeys.driverId.name, driverId);
+  static Future<bool> setPictureBase64(String pictureBase64Value) async => await _saveToCache(CacheKeys.pictureBase64.name, pictureBase64);
 
   static Future<bool> removeToken() async => _remove(CacheKeys.token.name);
   static Future<bool> removeId() async => _remove(CacheKeys.id.name);
@@ -72,35 +79,38 @@ class CacheManager {
   static Future<bool> removeFirstName() async => _remove(CacheKeys.firstName.name);
   static Future<bool> removeSignUpAs() async => _remove(CacheKeys.signUpAs.name);
   static Future<bool> removeDriverId() async => _remove(CacheKeys.driverId.name);
+  static Future<bool> removePictureBase64() async => _remove(CacheKeys.pictureBase64.name);
 
+  // Helper function to remove a value from cache
   static Future<bool> _remove(String key) async {
-    if(_pref == null) {
+    if (_pref == null) {
       return false;
     }
-    if(!_pref!.containsKey(key)) {
+    if (!_pref!.containsKey(key)) {
       return false;
     }
     return await _pref!.remove(key);
   }
 
+  // Helper function to get data from cache
   static dynamic _getFromCache<T>(String key) {
     print("$T ${key} getting type: int -> ${T == int} | bool -> ${T == bool} | string -> ${T == String}");
-    if(_pref == null) return '';
-    if(T == int) {
-      return  _pref!.getInt(key) ?? 0;
-    }else if(T == bool) {
-      return  _pref!.getBool(key) ?? false;
+    if (_pref == null) return '';
+    if (T == int) {
+      return _pref!.getInt(key) ?? 0;
+    } else if (T == bool) {
+      return _pref!.getBool(key) ?? false;
     }
-    return  _pref!.getString(key) ?? '';
+    return _pref!.getString(key) ?? '';
   }
 
+  // Helper function to save data to cache
   static Future<bool> _saveToCache(String key, dynamic value) async {
     print("${value.runtimeType} ${key} _saveToCache type: int -> ${value is int} | bool -> ${value is bool} | string -> ${value is String}");
-
-    if(_pref == null || value == null) return false;
-    if(value is bool) {
+    if (_pref == null || value == null) return false;
+    if (value is bool) {
       return await _pref!.setBool(key, value);
-    }else if(value is int) {
+    } else if (value is int) {
       return await _pref!.setInt(key, value);
     }
     return await _pref!.setString(key, value);
@@ -114,5 +124,6 @@ enum CacheKeys {
   email,
   firstName,
   signUpAs,
-  driverId
+  driverId,
+  pictureBase64
 }

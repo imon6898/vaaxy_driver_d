@@ -164,7 +164,8 @@ class RiderInfoDialog extends StatelessWidget {
                       ),
                       const SizedBox(height: 4.0),
                       Text(
-                        '${riderData['distance']} km',
+                        '${double.parse(riderData['distance'].toString()).toStringAsFixed(2)}km',
+                        //'${riderData['distance']} km',
                         style: const TextStyle(
                           fontSize: 16.0,
                           fontWeight: FontWeight.bold,
@@ -187,7 +188,7 @@ class RiderInfoDialog extends StatelessWidget {
                       ],
                     ),
                     child: Text(
-                      '\$${riderData['ridePrice']}',
+                      '\$${double.parse(riderData['ridePrice'].toString()).toStringAsFixed(2)}',
                       style: const TextStyle(
                         fontSize: 20.0,
                         fontWeight: FontWeight.bold,

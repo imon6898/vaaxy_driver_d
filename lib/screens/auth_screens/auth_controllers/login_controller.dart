@@ -74,6 +74,8 @@ class LoginController extends GetxController {
         await CacheManager.setFirstName(data['firstName'] ?? "");
         await CacheManager.setSignUpAs(data['signUpAs'] ?? "");
         await CacheManager.setDriverId(data['driverId'] ?? "");
+        await CacheManager.setPictureBase64(data['pictureBase64'] ?? "");
+
         // Successful login
         //await _saveLoginData(data);
         log('check user token..: ${ data}');

@@ -69,7 +69,9 @@ class MyAccount extends StatelessWidget {
           Center(
             child: CircleAvatar(
               radius: 50,
-              backgroundImage: NetworkImage(controller.picture.value ?? ''),
+              backgroundImage: controller.picture.value != null
+                  ? MemoryImage(controller.picture.value!)  // Use MemoryImage with Uint8List
+                  : AssetImage('assets/images/placeholder.png') as ImageProvider,  // Fallback to placeholder if picture is null
             ),
           ),
           const SizedBox(height: 10),
@@ -165,10 +167,13 @@ class MyAccount extends StatelessWidget {
           Text("Vehicle Information", style: Theme.of(context).textTheme.titleLarge),
           const SizedBox(height: 10),
           Text("Make and Model: ${controller.modal.value ?? ''}", style: const TextStyle(fontSize: 16)),
+          Text("Brand: ${controller.brand.value ?? ''}", style: const TextStyle(fontSize: 16)),
           Text("License Plate: ${controller.numberPlate.value ?? ''}", style: const TextStyle(fontSize: 16)),
           Text("Color: ${controller.color.value ?? ''}", style: const TextStyle(fontSize: 16)),
-          Text("Insurance: Valid until ${controller.expirationDate.value ?? ''}", style: const TextStyle(fontSize: 16)),
-        ],
+          Text("Vehicle Type: ${controller.vehicleType.value ?? ''}", style: const TextStyle(fontSize: 16)),
+          Text("Seating Capacity: ${controller.capacity.value ?? ''}", style: const TextStyle(fontSize: 16)),
+          Text("Launch Year: ${controller.launchYear.value ?? ''}", style: const TextStyle(fontSize: 16)),
+          Text("Insurance: Valid until ${controller.formatDate(controller.expirationDate.value)}", style: const TextStyle(fontSize: 16),),        ],
       ),
     );
   }
@@ -239,6 +244,58 @@ class MyAccount extends StatelessWidget {
               ),
             ),
           ),
+          const SizedBox(height: 20),
+          Text("Driver's License Information", style: Theme.of(context).textTheme.titleMedium),
+          const SizedBox(height: 10),
+          Text("License Number: ${controller.licenseNumber.value ?? 'N/A'}", style: const TextStyle(fontSize: 16)),
+          Text("License Type: ${controller.licenseType.value ?? 'N/A'}", style: const TextStyle(fontSize: 16)),
+          Text("Issuing State: ${controller.issuingState.value ?? 'N/A'}", style: const TextStyle(fontSize: 16)),
+          Text("Expiration Date: ${controller.formatDate(controller.expirationDate.value)}", style: const TextStyle(fontSize: 16),),          const SizedBox(height: 20),
+          Text("License Copies", style: Theme.of(context).textTheme.titleMedium),
+          const SizedBox(height: 10),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          //   children: [
+          //     Expanded(
+          //       child: Column(
+          //         children: [
+          //           const Text("Front Copy"),
+          //           const SizedBox(height: 10),
+          //           Container(
+          //             width: 100,
+          //             height: 100,
+          //             decoration: BoxDecoration(
+          //               border: Border.all(color: Colors.grey),
+          //               color: Colors.grey[300],
+          //             ),
+          //             child: controller.licenseCopyFront.value != null
+          //                 ? Image.memory(controller.licenseCopyFront.value!)
+          //                 : const Center(child: Text("No Image")),
+          //           ),
+          //         ],
+          //       ),
+          //     ),
+          //     Expanded(
+          //       child: Column(
+          //         children: [
+          //           const Text("Back Copy"),
+          //           const SizedBox(height: 10),
+          //           Container(
+          //             width: 100,
+          //             height: 100,
+          //             decoration: BoxDecoration(
+          //               border: Border.all(color: Colors.grey),
+          //               color: Colors.grey[300],
+          //             ),
+          //             child: controller.licenseCopyBack.value != null
+          //                 ? Image.memory(controller.licenseCopyBack.value!)
+          //                 : const Center(child: Text("No Image")),
+          //           ),
+          //         ],
+          //       ),
+          //     ),
+          //   ],
+          // ),
         ],
       ),
     );
